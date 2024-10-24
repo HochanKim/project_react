@@ -18,8 +18,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login />}></Route>
-          {/* <Route path='/newJoin' element={<Join />}></Route>
-          <Route path='/home' element={<Main />}></Route> */}
+          <Route path='/join' element={<Join />}></Route>
+          {/* <Route path='/home' element={<Main />}></Route> */}
         </Routes>
       </BrowserRouter>
     </div>

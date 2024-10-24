@@ -23,19 +23,20 @@ function Login() {
                 useId : userIdRef.current.value, 
                 usePwd : passwordRef.current.value
               });   // 'res' 객체로 리턴
-              console.log("로그인 성공", res);
-      
-              if(res.data.success){
+              console.log(res.data.results);
+
+              if(res.data.success == true){
+                // 로그인 성공
                 navigate("/main");
+                console.log(res, res.data.message);
+              } else if(res.data.message == '아이디와 비밀번호를 입력해주세요.') {
+                // 빈값 
+                navigate("/join")
+                alert(res.data.message);
               } else {
-                // 로그인
-                if(useId == '' || useId == null){
-                  alert("존재하지 않는 아이디입니다.");
-                } else if(usePwd != usePwd){
-                    alert("비밀번호가 맞지 않습니다.");
-                }
+                // 맞지 않은 비밀번호
+                alert(res.data.message);
               }
-      
         } catch(err){
           // 예외처리
           console.log("실패");

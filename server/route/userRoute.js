@@ -17,22 +17,25 @@ router.route("/")
     const { useId, usePwd } = req.body;
     const query = 'SELECT * FROM TBL_USER WHERE ID = ? AND PWD = ?';
     connection.query(query, [ useId, usePwd ], (err, results) => {
+        console.log(results);
         if(err){
             console.log('쿼리를 불러오지 못함', err);
             return;
         };
-        // 로그인 버튼 클릭 시,
-        if(results.length > 0){
-            // 로그인 성공
-            res.json({success : true, message : '성공적인 로그인'});
+
+        // 빈 값
+        if (useId == '' || usePwd == '') {
+            res.json({success: false, message: '아이디와 비밀번호를 입력해주세요.'});
+            return;
+        }
+
+        // 로그인 성공-실패
+        if (results.length > 0) {
+            res.json({success: true, message: '성공적인 로그인'});
+            return;
         } else {
-            // 로그인 실패
-            if(useId == '' || useId == null){
-                alert("존재하지 않는 아이디입니다.");
-            } else if(usePwd != usePwd){
-                alert("비밀번호가 맞지 않습니다.");
-            }
-            res.json({success : false, message : '로그인 실패'});
+            res.json({success: false, message: '존재하지 않는 아이디이거나 비밀번호가 일치하지 않습니다.'});
+            return;
         }
     });
 })
