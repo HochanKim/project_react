@@ -23,7 +23,7 @@ function Login() {
                 useId : userIdRef.current.value, 
                 usePwd : passwordRef.current.value
               });   // 'res' 객체로 리턴
-              console.log(res.data.results);
+              console.log(res.data);
 
               if(res.data.success == true){
                 // 로그인 성공

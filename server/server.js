@@ -8,8 +8,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({origin : 'http://localhost:3030'}));
 app.use(bodyParser.json());
 
+
 app.use("/user", require("./route/userRoute"));
 app.use("/join", require("./route/joinRoute"));
+app.use("/main", require("./route/mainRoute"));
 
 app.listen(3031, ()=>{
     console.log("server start!");
