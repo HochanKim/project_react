@@ -4,6 +4,8 @@ const connection = require('../db');
 const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+app.use(cors()); // 모든 도메인에서 오는 요청 허용
 
 
 app.use(bodyParser.json());
@@ -51,8 +53,11 @@ router.route("/")
     });
 })
 
-router.route("/main")
-.post()
+router.route("/user/account:id")
+.post((req, res) => {
+    const id = req.params.id;   // db에 저장된 id 가져와서 넣기
+    const query = 'SELECT * FROM TBL_USER WHERE ID = ? AND PWD = ?';
+})
 
 
 module.exports = router;

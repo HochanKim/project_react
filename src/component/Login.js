@@ -27,15 +27,18 @@ function Login() {
 
               if(res.data.success == true){
                 // 로그인 성공
+                localStorage.setItem('token', res.data.token);
                 navigate("/main");
                 console.log(res, res.data.message);
               } else if(res.data.message == '아이디와 비밀번호를 입력해주세요.') {
                 // 빈값 
                 navigate("/join")
                 alert(res.data.message);
+                return;
               } else {
                 // 맞지 않은 비밀번호
                 alert(res.data.message);
+                return;
               }
         } catch(err){
           // 예외처리

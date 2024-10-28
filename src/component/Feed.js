@@ -3,14 +3,24 @@ import axios from 'axios';    // axios 통신기능 가져오기
 import { Box, Typography, Paper, IconButton } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { jwtDecode } from 'jwt-decode';  // jwt 토큰 디코딩
 
 function Feed() {
     const [feeds, setFeeds] = useState([]);
 
+    // 로컬 스토리지에서 JWT 토큰 가져오기
+    const token = localStorage.getItem('token');
+
+    // 토큰에서 현재 로그인한 사용자 아이디 추출
+    const currentUserId = token ? jwtDecode(token).id : null;  
+
+
     async function fnGetFeed(){
         // 피드 가져오기
         try {
-            const res = await axios.get("http://localhost:3031/main");
+            const res = await axios.get("http://localhost:3031/main", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             if(res.data.success){
                 setFeeds(res.data.list);
                 console.log(res.data.list);
@@ -54,6 +64,8 @@ function Feed() {
 
     };
 
+
+    // 피드 데이터 로드(렌더링)
     useEffect(() => {
         fnGetFeed();
     }, []);
@@ -80,15 +92,18 @@ function Feed() {
               <Box display="flex" justifyContent="space-between" mt={1}>
                   <Box>
                   <IconButton color="primary" onClick={()=>{
+                    // 좋아요 버튼
                       fnLikeFeed(feed.id);
                   }}>
                       <ThumbUpIcon style={{marginRight : '20px'}} /> {feed.favorait}
                   </IconButton>
-                  <IconButton color="secondary" onClick={()=>{
-                      fnRemoveFeed(feed.id);
-                  }}>
-                      <DeleteIcon />
-                  </IconButton>
+                {currentUserId === feed.userId && (
+                    <IconButton color="secondary" onClick={() => 
+                        fnRemoveFeed(feed.id)
+                    }>
+                        <DeleteIcon />
+                    </IconButton>
+                )}
                   </Box>
               </Box>
           </Paper>

@@ -11,7 +11,7 @@ function Footer(props) {
 
     return (
         <div style={footerStyle}>
-            푸터 영역
+            Welcome to Swallow!
         </div>
     );
 }
