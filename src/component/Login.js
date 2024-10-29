@@ -14,14 +14,14 @@ function Login() {
         console.log(userIdRef.current.value);
         console.log(passwordRef.current.value);
 
-        const useId = userIdRef.current.value;
-        const usePwd = passwordRef.current.value;
+        const userId = userIdRef.current.value;
+        const userPwd = passwordRef.current.value;
 
         try {
             const res = await axios.post("http://localhost:3031/user", 
               {
-                useId : userIdRef.current.value, 
-                usePwd : passwordRef.current.value
+                userId : userIdRef.current.value, 
+                userPwd : passwordRef.current.value
               });   // 'res' 객체로 리턴
               console.log(res.data);
 

@@ -4,7 +4,7 @@ const connection = require('../db');
 
 router.route("/")
 .get((req, res) => {
-    const query = 'SELECT * FROM TBL_USER';
+    const query = 'SELECT * FROM SWALLOW_USER';
     connection.query(query, (err, results) => {
         if(err){
             console.log('쿼리를 불러오지 못함', err);
@@ -14,13 +14,13 @@ router.route("/")
     });
 })
 .post((req, res) => {
-    const { useId, usePwd, userName } = req.body;
+    const { userId, userPwd, userName } = req.body;
 
     // 빈 값
-    if (useId == '') {
+    if (userId == '') {
         res.json({success: false, message: '아이디를 입력해주세요.'});
         return;
-    } else if (usePwd == '') {
+    } else if (userPwd == '') {
         res.json({success: false, message: '비밀번호를 입력해주세요.'});
         return;
     } else if (userName == '') {
@@ -28,8 +28,8 @@ router.route("/")
         return;
     }
 
-    const query = 'INSERT INTO tbl_user (id, pwd, name, gender) VALUES(?, ?, ?, null)';
-    connection.query(query, [ useId, usePwd, userName ], (err, results) => {
+    const query = 'INSERT INTO swallow_user (id, pwd, name, profileImg, followingNum, followerNum, posts, biography) VALUES(?, ?, ?, NULL, 0, 0, 0, NULL)';
+    connection.query(query, [ userId, userPwd, userName ], (err, results) => {
         if(err){
             console.log('쿼리를 불러오지 못함', err);
             return;
@@ -41,11 +41,11 @@ router.route("/")
 
 // 아이디 중복체크
 router.post('/check-duplicate', (req, res) => {
-    const { useId } = req.body; // 사용자가 입력한 아이디
+    const { userId } = req.body; // 사용자가 입력한 아이디
 
     // 입력된 아이디를 DB에서 검색
-    const query = 'SELECT * FROM tbl_user WHERE id = ?';
-    connection.query(query, [useId], (err, results) => {
+    const query = 'SELECT * FROM swallow_user WHERE id = ?';
+    connection.query(query, [userId], (err, results) => {
         if (err) {
             console.log('쿼리를 불러오지 못함', err);
             return res.json({ success: false, message: '서버 오류' });
@@ -54,7 +54,7 @@ router.post('/check-duplicate', (req, res) => {
         if (results.length > 0) {
             // 아이디가 이미 존재하는 경우
             res.json({ success: false, message: '이미 존재하는 아이디입니다.' });
-        } else if (useId == '') {
+        } else if (userId == '') {
             res.json({ success: false, message: '아이디를 입력해주세요.' });
         } else {
             // 아이디가 존재하지 않는 경우

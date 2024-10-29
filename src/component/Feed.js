@@ -83,8 +83,14 @@ function Feed() {
               <Typography variant="h6" gutterBottom>
                 {feed.userId}
               </Typography>
+              <Typography variant="h6" gutterBottom>
+                {feed.title}
+              </Typography>
               <Typography variant="body1" gutterBottom>
                 {feed.content}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {feed.imgPath}
               </Typography>
               <Typography variant="caption" color="textSecondary" gutterBottom>
                 {new Date(feed.cdatetime).toLocaleString()}

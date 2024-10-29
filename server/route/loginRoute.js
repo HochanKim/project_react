@@ -11,12 +11,12 @@ app.use(bodyParser.json());
 
 // 로그인 요청 처리 및 JWT 발급
 app.post('/login', (req, res) => {
-    const { useId, usePwd } = req.body;
+    const { userId, userPwd } = req.body;
 
     // 예시로 사용자 검증 (실제로는 DB에서 사용자 정보 확인)
-    if (useId === 'useId' && usePwd === 'usePwd') {
+    if (userId === 'userId' && userPwd === 'userPwd') {
         // JWT 토큰 생성
-        const token = jwt.sign({ id: useId }, SECRET_KEY, { expiresIn: '30m' });
+        const token = jwt.sign({ id: userId }, SECRET_KEY, { expiresIn: '30m' });
 
         // 토큰을 클라이언트에 전달
         res.json({

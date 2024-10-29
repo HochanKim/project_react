@@ -14,7 +14,7 @@ const SECRET_KEY = 'your_secret_key';
 
 router.route("/")
 .get((req, res) => {
-    const query = 'SELECT * FROM TBL_USER';
+    const query = 'SELECT * FROM SWALLOW_USER';
     connection.query(query, (err, results) => {
         if(err){
             console.log('쿼리를 불러오지 못함', err);
@@ -24,10 +24,10 @@ router.route("/")
     });
 })
 .post((req, res) => {
-    const { useId, usePwd } = req.body;
+    const { userId, userPwd } = req.body;
 
-    const query = 'SELECT * FROM TBL_USER WHERE ID = ? AND PWD = ?';
-    connection.query(query, [ useId, usePwd ], (err, results) => {
+    const query = 'SELECT * FROM SWALLOW_USER WHERE ID = ? AND PWD = ?';
+    connection.query(query, [ userId, userPwd ], (err, results) => {
         console.log(results);
         if(err){
             console.log('쿼리를 불러오지 못함', err);
@@ -35,7 +35,7 @@ router.route("/")
         };
 
         // 빈 값
-        if (useId == '' || usePwd == '') {
+        if (userId == '' || userPwd == '') {
             res.json({success: false, message: '아이디와 비밀번호를 입력해주세요.'});
             return;
         }
@@ -43,7 +43,7 @@ router.route("/")
         // 로그인 성공-실패
         if (results.length > 0) {
             // JWT 토큰 생성
-            const token = jwt.sign({ id: useId }, SECRET_KEY, { expiresIn: '30m' });
+            const token = jwt.sign({ id: userId }, SECRET_KEY, { expiresIn: '30m' });
             res.json({success: true, message: '성공적인 로그인', token});
             return;
         } else {
@@ -53,11 +53,6 @@ router.route("/")
     });
 })
 
-router.route("/user/account:id")
-.post((req, res) => {
-    const id = req.params.id;   // db에 저장된 id 가져와서 넣기
-    const query = 'SELECT * FROM TBL_USER WHERE ID = ? AND PWD = ?';
-})
 
 
 module.exports = router;

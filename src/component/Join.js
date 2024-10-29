@@ -21,16 +21,16 @@ function Join() {
     const [isDuplicateCheck, setDuplicateCheck] = useState(false);
 
     async function duplicateCheck() {
-      const useId = inputEmailRef.current.value;
+      const userId = inputEmailRef.current.value;
 
-      if (!useId) {
+      if (!userId) {
           alert('아이디를 입력해주세요.');
           return;
       }
 
       try {
           const res = await axios.post("http://localhost:3031/join/check-duplicate", { 
-            useId 
+            userId 
           });
           alert(res.data.message);
 
@@ -48,12 +48,12 @@ function Join() {
 
     async function fnJoin(){
         // '회원가입' 버튼 클릭시, 기입한 데이터 보내기
-        const useId = inputEmailRef.current.value;
-        const usePwd = inputPwdRef.current.value;
+        const userId = inputEmailRef.current.value;
+        const userPwd = inputPwdRef.current.value;
         const pwdCheck = confirmPwdRef.current.value;
         const userName = inputNameRef.current.value;
 
-        console.log("콘솔 : ", useId, usePwd, pwdCheck, userName);
+        console.log("콘솔 : ", userId, userPwd, pwdCheck, userName);
 
         // 아이디 중복체크
         if(!isDuplicateCheck){
@@ -61,23 +61,23 @@ function Join() {
         }
 
         // 비밀번호 체크
-        if(usePwd != pwdCheck){
+        if(userPwd != pwdCheck){
           return alert('비밀번호가 맞지 않습니다.');
         }
 
         try {
           const res = await axios.post("http://localhost:3031/join", {
-            useId,
-            usePwd,
+            userId,
+            userPwd,
             userName  
           });
 
           // 빈값
-          if (useId == '') {
+          if (userId == '') {
                 console.log(res, res.data.message);
                 alert(res.data.message);
                 return;
-            } else if (usePwd == '') {
+            } else if (userPwd == '') {
                 console.log(res, res.data.message);
                 alert(res.data.message);
                 return;

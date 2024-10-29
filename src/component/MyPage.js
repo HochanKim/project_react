@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Box, Avatar, Grid, Paper } from '@mui/material';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';  // jwt 디코딩 라이브러리 추가
 
 function MyPage() {
-  // 사용자 정보 저장을 위한 상태 변수들
   const [userData, setUserData] = useState({
     name: '',
     userId: '',
@@ -14,16 +14,16 @@ function MyPage() {
   });
 
   // 서버에서 사용자 데이터를 불러오는 함수
-  const fetchUserData = async () => {
+  const fetchUserData = async (userId) => {
     try {
-      // 예시 API 요청 (실제로는 서버에서 데이터를 불러오는 API 엔드포인트)
-      const response = await axios.get('http://localhost:3031/api/user'); // API URL 수정
+      // API 요청 보내기
+      const response = await axios.get(`http://localhost:3031/api/account/${userId}`);
       const data = response.data;
 
       // 서버에서 가져온 데이터로 상태 업데이트
       setUserData({
         name: data.name,
-        userId: data.id,
+        userId: data.userId,
         profileImage: data.profileImg,
         followers: data.followers,
         following: data.following,
@@ -37,56 +37,29 @@ function MyPage() {
 
   // 컴포넌트가 처음 렌더링될 때 API 호출
   useEffect(() => {
-    fetchUserData();  // 사용자 데이터 가져오기
+    // 로컬 스토리지에서 JWT 토큰 가져오기
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      // JWT 토큰을 디코딩해서 사용자 ID 가져오기
+      const decodedToken = jwtDecode(token);  // 디코딩
+      const userId = decodedToken.id;  // JWT 토큰에서 사용자 ID 추출
+
+      console.log("현재 로그인 아이디:", userId);  // 콘솔로 ID 확인
+      fetchUserData(userId);  // 사용자 데이터 가져오기
+    } else {
+      console.error('로그인된 사용자가 없습니다.');
+    }
   }, []);
 
-
   return (
-    <Container maxWidth="md">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="flex-start"
-        minHeight="100vh"
-        sx={{ padding: '20px' }}
-      >
-        <Paper elevation={3} sx={{ padding: '20px', borderRadius: '15px', width: '100%' }}>
-          {/* 프로필 정보 상단 배치 */}
-          <Box display="flex" flexDirection="column" alignItems="center" sx={{ marginBottom: 3 }}>
-            <Avatar
-              alt="프로필 이미지"
-              src={userData.profileImage}  // 서버에서 가져온 프로필 이미지
-              sx={{ width: 100, height: 100, marginBottom: 2 }}
-            />
-            <Typography variant="h5">{userData.name}</Typography>  {/* 서버에서 가져온 이름 */}
-            <Typography variant="body2" color="text.secondary">
-              @{userData.username}  {/* 서버에서 가져온 사용자 이름 */}
-            </Typography>
-          </Box>
-          <Grid container spacing={2} sx={{ marginTop: 2 }}>
-            <Grid item xs={4} textAlign="center">
-              <Typography variant="h6">팔로워</Typography>
-              <Typography variant="body1">{userData.followers}</Typography>  {/* 팔로워 수 */}
-            </Grid>
-            <Grid item xs={4} textAlign="center">
-              <Typography variant="h6">팔로잉</Typography>
-              <Typography variant="body1">{userData.following}</Typography>  {/* 팔로잉 수 */}
-            </Grid>
-            <Grid item xs={4} textAlign="center">
-              <Typography variant="h6">게시물</Typography>
-              <Typography variant="body1">{userData.posts}</Typography>  {/* 게시물 수 */}
-            </Grid>
-          </Grid>
-          <Box sx={{ marginTop: 3 }}>
-            <Typography variant="h6">내 소개</Typography>
-            <Typography variant="body1">
-              {userData.bio}  {/* 서버에서 가져온 소개 정보 */}
-            </Typography>
-          </Box>
-        </Paper>
-      </Box>
-    </Container>
+    <div>
+      {/* 사용자 정보 출력 */}
+      <h1>{userData.name}</h1>
+      <div>{userData.profileImage}</div>
+      <p>아이디 : @{userData.userId}</p>
+      <p>소개 : {userData.bio}</p>
+    </div>
   );
 }
 

@@ -11,11 +11,10 @@ app.use(bodyParser.json());
 
 app.use("/user", require("./route/userRoute"));
 app.use("/join", require("./route/joinRoute"));
+app.use("/api", require("./route/apiRoute"));
+app.use("/feed", require("./route/registRoute"));
 
-// 사용자 정보 API 엔드포인트
-app.get('/api/user', (req, res) => {
-    res.json(userData);
-});
+
 
 app.use("/main", require("./route/mainRoute"));
 // JWT 검증 미들웨어
