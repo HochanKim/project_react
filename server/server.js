@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const app = express()
+const app = express();
+const path = require('path');
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
@@ -13,6 +14,8 @@ app.use("/user", require("./route/userRoute"));
 app.use("/join", require("./route/joinRoute"));
 app.use("/api", require("./route/apiRoute"));
 app.use("/feed", require("./route/registRoute"));
+// 정적 파일 제공 설정
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 

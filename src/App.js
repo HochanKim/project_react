@@ -7,6 +7,7 @@ import Join from './pages/MemberJoinPage';
 import Main from './pages/MainPage';
 import AccountPage from './pages/AccountPage';
 import Register from './component/Register';
+
 import './App.css';
 
 function App() {

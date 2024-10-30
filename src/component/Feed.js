@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';    // axios 통신기능 가져오기
-import { Box, Typography, Paper, IconButton } from '@mui/material';
+import { Box, Typography, Paper, IconButton, Dialog } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { jwtDecode } from 'jwt-decode';  // jwt 토큰 디코딩
 
 function Feed() {
     const [feeds, setFeeds] = useState([]);
+    const [open, setOpen] = useState(false);  // 모달 열림 상태 관리
+    const [selectedImage, setSelectedImage] = useState(null);  // 선택된 이미지
+
+    // 모달 열기 함수
+    const handleClickOpen = (image) => {
+        setSelectedImage(image);  // 선택된 이미지를 설정
+        setOpen(true);  // 모달 열기
+    };
+
+    // 모달 닫기 함수
+    const handleClose = () => {
+        setOpen(false);  // 모달 닫기
+        setSelectedImage(null);  // 선택된 이미지 초기화
+    };
 
     // 로컬 스토리지에서 JWT 토큰 가져오기
     const token = localStorage.getItem('token');
@@ -89,9 +103,15 @@ function Feed() {
               <Typography variant="body1" gutterBottom>
                 {feed.content}
               </Typography>
-              <Typography variant="body1" gutterBottom>
-                {feed.imgPath}
-              </Typography>
+                {/* 이미지가 있을 경우 이미지 표시 및 클릭시 확대 */}
+                {feed.imgPath && (
+                    <img
+                    src={`http://localhost:3031/${feed.imgPath}`}
+                    alt={feed.title}
+                    style={{ width: '100%', cursor: 'pointer' }}  // 클릭 가능한 스타일
+                    onClick={() => handleClickOpen(`http://localhost:3031/${feed.imgPath}`)}  // 클릭시 모달 열기
+                    />
+                )}
               <Typography variant="caption" color="textSecondary" gutterBottom>
                 {new Date(feed.cdatetime).toLocaleString()}
               </Typography>
@@ -114,6 +134,17 @@ function Feed() {
               </Box>
           </Paper>
         ))}
+
+        {/* Dialog 모달을 사용하여 이미지 확대 */}
+        <Dialog open={open} onClose={handleClose} maxWidth="md">
+            {/* 이미지가 모달 바깥을 클릭하면 onClose 이벤트로 닫힘 */}
+            <img
+            src={selectedImage}
+            alt="확대된 이미지"
+            style={{ width: '100%', height: 'auto' }}
+            onClick={handleClose}  // 이미지를 클릭해도 모달을 닫을 수 있게 설정 가능
+            />
+        </Dialog>
     </Box>
     );
 }

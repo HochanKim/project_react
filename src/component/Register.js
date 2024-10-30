@@ -14,12 +14,15 @@ import {
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 function Register() {
   const [file, setFile] = React.useState(null);
   const [title, setTitle] = React.useState('');
   const [content, setContent] = React.useState('');
   const [category, setCategory] = React.useState('');
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -32,26 +35,35 @@ function Register() {
       formData.append('content', content);
       formData.append('category', category);
       if (file) {
-        formData.append('file', file);  // 파일 첨부
+        formData.append('file', file);
       }
-
-      // 서버에 POST 요청
+  
+      // 로컬 스토리지에서 JWT 토큰 가져오기
+      const token = localStorage.getItem('token');  // 토큰 가져오기
+      console.log('토큰 : ', token);
+  
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+  
+      // 서버로 POST 요청 보내기, Authorization 헤더에 JWT 토큰 추가
       const response = await axios.post('http://localhost:3031/feed', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',  // 멀티파트 전송을 위한 헤더 설정
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,  // JWT 토큰을 Authorization 헤더에 추가
         },
       });
-
-      // 요청 성공 시 처리
+  
       if (response.data.success) {
         alert('등록되었습니다!');
-        // 추가로 성공 시 동작할 코드 (페이지 이동 등)
+        navigate('/main');
       }
     } catch (error) {
       console.error('데이터 전송 중 오류 발생:', error);
-      alert('오류가 발생했습니다.');
     }
   };
+
 
   return (
     <Container maxWidth="sm">
