@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/LoginPage';
 import Join from './pages/MemberJoinPage';
 import Main from './pages/MainPage';
-import AccountPage from './pages/AccountPage';
+import UserPage from './pages//UserPage';
 import Register from './component/Register';
 
 import './App.css';
@@ -23,7 +23,7 @@ function App() {
           <Route path='/' element={<Login />}></Route>
           <Route path='/join' element={<Join />}></Route>
           <Route path='/main' element={<Main />}></Route>
-          <Route path="/api/account/:id" element={<AccountPage />}></Route>
+          <Route path="/api/account/:id" element={<UserPage />}></Route>
           <Route path="/regist/:id" element={<Register />}></Route>
         </Routes>
       </BrowserRouter>
