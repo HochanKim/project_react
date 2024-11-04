@@ -47,7 +47,7 @@ router.post('/', upload.single('file'), (req, res) => {
     const filePath = req.file ? req.file.path : null;
 
     // DB에 저장할 쿼리
-    const query = 'INSERT INTO tbl_feed (userId, title, content, category, imgPath, favorait) VALUES (?, ?, ?, ?, ?, 0)';
+    const query = 'INSERT INTO TBL_FEED (userId, title, content, category, imgPath, favorait) VALUES (?, ?, ?, ?, ?, 0)';
 
     connection.query(query, [userId, title, content, category, filePath], (err, result) => {
       if (err) {

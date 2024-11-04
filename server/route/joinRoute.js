@@ -44,7 +44,7 @@ router.post('/check-duplicate', (req, res) => {
     const { userId } = req.body; // 사용자가 입력한 아이디
 
     // 입력된 아이디를 DB에서 검색
-    const query = 'SELECT * FROM swallow_user WHERE id = ?';
+    const query = 'SELECT * FROM SWALOOW_USER WHERE id = ?';
     connection.query(query, [userId], (err, results) => {
         if (err) {
             console.log('쿼리를 불러오지 못함', err);

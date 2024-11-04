@@ -6,7 +6,7 @@ const connection = require('../db');
 router.route("/")
 .get((req, res) => {
     // 피드 불러오기
-    const query = 'SELECT * FROM tbl_feed ORDER BY ID DESC';
+    const query = 'SELECT * FROM TBL_FEED ORDER BY ID DESC';
     connection.query(query, (err, results) => {
         if(err){
             console.log('쿼리를 불러오지 못함', err);

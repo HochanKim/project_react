@@ -2,8 +2,8 @@ const mysql = require('mysql2');
 
 // MySQL 연결 설정
 const connection = mysql.createConnection({
-    host: 'localhost',      
-    user: 'root',           
+    host: 'database-1.c3mucqsqmett.ap-northeast-2.rds.amazonaws.com',      
+    user: 'admin',           
     password: 'test1234',   
     database: 'sample'     
 });
